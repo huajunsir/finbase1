@@ -13,7 +13,11 @@
 	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/javax.json.jar"/>
 	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/joda-time.jar"/>
 	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/jollyday.jar"/>
-	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0.jar" sourcepath="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/xom-1.2.10-src.jar"/>
 	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/xom.jar"/>
 	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-ner-2015-12-09/stanford-ner-3.6.0.jar" sourcepath="/Users/boboss/Application/StandfordNLP/stanford-ner-2015-12-09/stanford-ner-3.6.0-sources.jar">
