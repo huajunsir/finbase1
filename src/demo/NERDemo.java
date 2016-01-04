@@ -8,7 +8,9 @@ import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.sequences.DocumentReaderAndWriter;
 import edu.stanford.nlp.util.Triple;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 
 /** This is a demo of calling CRFClassifier programmatically.
@@ -37,11 +39,16 @@ import java.util.List;
  */
 
 public class NERDemo {
-	private static final String basedir = "/Users/boboss/Application/"
-			+ "StandfordNLP/stanford-ner-2015-12-09";
+	
+	
+	
+	private static String basedir = "Application/StandfordNLP/stanford-ner-2015-12-09";
 
 
   public static void main(String[] args) throws Exception {
+	  
+	
+    basedir="/"+ System.getenv("HOME") + "/" + basedir;
 
     String serializedClassifier = basedir + "/classifiers/english.all.3class.distsim.crf.ser.gz";
 
