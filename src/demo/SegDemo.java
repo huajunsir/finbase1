@@ -22,7 +22,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 
 public class SegDemo {
 
-  private static final String basedir = "/Users/boboss/Application/"
+  private static final String basedir = "/Users/chenhuajun/Application/"
   		+ "StandfordNLP/stanford-segmenter-2015-12-09/data";
  
   
@@ -38,7 +38,7 @@ public class SegDemo {
       //props.setProperty("testFile", args[0]);
     //}
     
-    System.out.println(args[0]);
+ 
     props.setProperty("inputEncoding", "GBK");
     props.setProperty("sighanPostProcessing", "true");
 

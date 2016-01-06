@@ -1,6 +1,7 @@
 package cn.edu.zju.finbase;
 
 import java.io.*;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 
@@ -13,8 +14,7 @@ public class SegmenterDIR {
 	String inputDir;
 	String outputDir;
 	
-	private static final String basedir = "/Users/boboss/Application/"
-	  		+ "StandfordNLP/stanford-segmenter-2015-12-09/data";
+	private static String basedir = "Application/StandfordNLP/stanford-segmenter-2015-12-09/data";
 
 	/*
 	 * input: input dir
@@ -55,6 +55,9 @@ public class SegmenterDIR {
 	
 	public void segmentDir() {
 		
+		    basedir=System.getenv("HOME") + "/" + basedir;
+		    
+		    System.out.println(basedir);
 		    //创建分词器，建立分词模型
 		    Properties props = new Properties();
 		    props.setProperty("sighanCorporaDict", basedir);
@@ -83,13 +86,15 @@ public class SegmenterDIR {
 				        System.out.println(fileContents);
 				        //完成分词
 				        List<String> segmented=segmenter.segmentString(fileContents);
-				       
+				        Iterator it=segmented.iterator();
+				        String temp=" ";
+				        while(it.hasNext()) temp += (String) it.next() +" "; 
 				        //分词结果写入文件  
 				        FileWriter fw=new FileWriter(this.outputDir + "/" + files[i]);
-				    	fw.write(segmented.toString());
+				    	fw.write(temp);
 				    	fw.flush();
 				    	fw.close();
-				    	System.out.println(segmented);	
+				    	System.out.println(temp);	
 				    	
 			    } catch (Exception e) {
 			    		System.out.println("写入文件内容出错");
