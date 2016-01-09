@@ -30,5 +30,8 @@
 			<attribute name="javadoc_location" value="jar:file:/Users/boboss/Application/StandfordNLP/stanford-ner-2015-12-09/stanford-ner-3.6.0-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0-models.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/Application/StandfordNLP/stanford-chinese-corenlp-2015-12-08-models.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/lib/postgresql-9.4.1207.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

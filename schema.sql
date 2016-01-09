@@ -12,8 +12,8 @@ CREATE TABLE sentences(
   );
 
 
-DROP TABLE IF EXISTS people_mentions CASCADE;
-CREATE TABLE company_mentions(
+DROP TABLE IF EXISTS org_mentions CASCADE;
+CREATE TABLE org_mentions(
   sentence_id text,
   start_position int,
   length int,
@@ -22,10 +22,10 @@ CREATE TABLE company_mentions(
   );
 
 
-DROP TABLE IF EXISTS has_spouse CASCADE;
-CREATE TABLE buy(
-  company1_id text,
-  company2_id text,
+DROP TABLE IF EXISTS has_relation CASCADE;
+CREATE TABLE has_relation(
+  org1_id text,
+  org2_id text,
   sentence_id text,
   description text,
   is_true boolean,
@@ -33,7 +33,7 @@ CREATE TABLE buy(
   id bigint   -- reserved for DeepDive
   );
 
-DROP TABLE IF EXISTS has_spouse_features CASCADE;
-CREATE TABLE buy_features(
+DROP TABLE IF EXISTS has_relation_features CASCADE;
+CREATE TABLE has_relation_features(
   relation_id text,
   feature text);
