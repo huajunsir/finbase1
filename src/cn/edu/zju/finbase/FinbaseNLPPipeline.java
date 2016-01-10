@@ -18,8 +18,8 @@ import edu.stanford.nlp.util.*;
 
 /**
  * 从article表中读取一个分好词的文档，
- * 将该文档利用StandfordCoreNLP进行切句子，实体标记，pos处理，语法依赖分析等工作，
- * 再插入到sentence表中。
+ * 将该文档文本利用StandfordCoreNLP进行切句子，实体标记，pos处理，语法依赖分析等工作，
+ * 再将结果插入到sentence表中。
  * 
  * @author boboss
  *
@@ -220,7 +220,7 @@ public class FinbaseNLPPipeline {
 		
 		pipeline.annotate(annotation);
 
-		//读取每一个sentence
+		//读取每一个sentence，获取词列表、POS 列表、NER列表、语法分析树等。
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
 		for(CoreMap sentence_map:sentences){
 			    
