@@ -10,21 +10,22 @@
     <property name="source" value="1.8"/>
     <path id="finbase1.classpath">
         <pathelement location="bin"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-segmenter-2015-12-09/slf4j-api.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-segmenter-2015-12-09/slf4j-simple.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-segmenter-2015-12-09/stanford-segmenter-3.6.0.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/ejml-0.23.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/javax.json.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/joda-time.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/jollyday.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/xom-1.2.10-src.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/xom.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-ner-2015-12-09/stanford-ner-3.6.0.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-ner-2015-12-09/stanford-ner.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0-models.jar"/>
-        <pathelement location="../../Application/StandfordNLP/stanford-chinese-corenlp-2015-12-08-models.jar"/>
-        <pathelement location="../lib/postgresql-9.4.1207.jar"/>
+        <pathelement location="lib/ejml-0.23.jar"/>
+        <pathelement location="lib/javax.json.jar"/>
+        <pathelement location="lib/joda-time.jar"/>
+        <pathelement location="lib/jollyday.jar"/>
+        <pathelement location="lib/postgresql-9.4.1207.jar"/>
+        <pathelement location="lib/protobuf.jar"/>
+        <pathelement location="lib/slf4j-api.jar"/>
+        <pathelement location="lib/slf4j-simple.jar"/>
+        <pathelement location="lib/stanford-chinese-corenlp-2015-12-08-models.jar"/>
+        <pathelement location="lib/stanford-corenlp-3.6.0-models.jar"/>
+        <pathelement location="lib/stanford-corenlp-3.6.0.jar"/>
+        <pathelement location="lib/stanford-ner-3.6.0.jar"/>
+        <pathelement location="lib/stanford-ner.jar"/>
+        <pathelement location="lib/stanford-segmenter-3.6.0.jar"/>
+        <pathelement location="lib/xom-1.2.10-src.jar"/>
+        <pathelement location="lib/xom.jar"/>
     </path>
     <target name="init">
         <mkdir dir="bin"/>
@@ -48,5 +49,22 @@
         </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
-    
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="FinbaseNLPPipeline">
+        <java classname="cn.edu.zju.finbase.FinbaseNLPPipeline" failonerror="true" fork="yes">
+            <classpath refid="finbase1.classpath"/>
+        </java>
+    </target>
 </project>

@@ -1,3 +1,10 @@
+DROP TABLE IF EXISTS articles CASCADE;
+
+CREATE TABLE articles(
+    article_id bigint,    -- identifier of article
+    text       text       -- all text in the article
+  );
+
 DROP TABLE IF EXISTS sentences CASCADE;
 CREATE TABLE sentences(
   document_id text,
