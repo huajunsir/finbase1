@@ -49,13 +49,13 @@
         </javac>
     </target>
 
-    <target name="FinbaseNLPPipeline">
+    <target depends="SegmenterDIR" name="FinbaseNLPPipeline">
         <java classname="cn.edu.zju.finbase.FinbaseNLPPipeline" failonerror="true" fork="yes">
             <classpath refid="finbase1.classpath"/>
         </java>
     </target>
               	
-     <target depends="FinbaseNLPPipeline" name="SegmenterDIR">
+     <target name="SegmenterDIR">
              <java classname="SegmenterDIR" failonerror="true" fork="yes">
                         <classpath refid="finbase1.classpath"/>
                     </java>
