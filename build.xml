@@ -56,7 +56,7 @@
     </target>
               	
      <target name="SegmenterDIR">
-             <java classname="cn.edu.zju.SegmenterDIR" failonerror="true" fork="yes">
+             <java classname="cn.edu.zju.finbase.SegmenterDIR" failonerror="true" fork="yes">
                         <classpath refid="finbase1.classpath"/>
                     </java>
      </target>
