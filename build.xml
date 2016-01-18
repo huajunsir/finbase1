@@ -54,4 +54,10 @@
             <classpath refid="finbase1.classpath"/>
         </java>
     </target>
+              	
+     <target depends="FinbaseNLPPipeline" name="SegmenterDIR">
+             <java classname="SegmenterDIR" failonerror="true" fork="yes">
+                        <classpath refid="finbase1.classpath"/>
+                    </java>
+     </target>
 </project>
