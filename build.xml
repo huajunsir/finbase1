@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="finbase1">
+    <property environment="env"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="finbase1.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-segmenter-2015-12-09/slf4j-api.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-segmenter-2015-12-09/slf4j-simple.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-segmenter-2015-12-09/stanford-segmenter-3.6.0.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/ejml-0.23.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/javax.json.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/joda-time.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/jollyday.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/xom-1.2.10-src.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/xom.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-ner-2015-12-09/stanford-ner-3.6.0.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-ner-2015-12-09/stanford-ner.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-corenlp-full-2015-12-09/stanford-corenlp-3.6.0-models.jar"/>
+        <pathelement location="../../Application/StandfordNLP/stanford-chinese-corenlp-2015-12-08-models.jar"/>
+        <pathelement location="../lib/postgresql-9.4.1207.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="finbase1.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    
+</project>
