@@ -8,6 +8,7 @@
 
 import sys
 
+
 ARR_DELIM = '~^~'
 
 # For-loop for each row in the input query
@@ -32,7 +33,9 @@ for row in sys.stdin:
 
   # Output a tuple for each PERSON phrase
   for start_position, length, text in phrases:
-    print '\t'.join(
+        text=text.replace('-LRB-','')
+        text=text.replace('-RRB-','')
+    print ''.join(
       [ str(x) for x in [
         sentence_id,
         start_position,   # start_position
