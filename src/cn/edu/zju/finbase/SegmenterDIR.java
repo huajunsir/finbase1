@@ -15,7 +15,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 
 public class SegmenterDIR {
 	
-	String inputDir="./output";
+	String inputDir="./rawtxt";
 	String outputDir;
 	Connection con=null;
 	
