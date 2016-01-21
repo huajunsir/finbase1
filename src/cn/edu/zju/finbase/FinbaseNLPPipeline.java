@@ -179,7 +179,8 @@ public class FinbaseNLPPipeline {
 				
 				String article_id=rs.getString(1);
 				String text=rs.getString( 2 );
-				System.out.println("Processing article:" + article_id);
+				String file_name=rs.getString(3);
+				System.out.println("Processing article:" + article_id + ":"+file_name);
 				try {
 					this.annotateOneArticle(article_id, text);
 				} catch (FileNotFoundException e) {
@@ -213,7 +214,7 @@ public class FinbaseNLPPipeline {
 		String sentence_id= "";
 		
 	    out.println("Start to annotate:" + article_id + "...................");
-		out.println(text);
+		//out.println(text);
 		
 		// Initialize an Annotation with some text to be annotated. The text is the argument to the constructor.
 		Annotation annotation=new Annotation(text);
@@ -227,8 +228,8 @@ public class FinbaseNLPPipeline {
 			    sentence=sentence_map.toString();
 			    //sentence=sentence.replace(',', ' '); //去掉“，”
 		    	
-			    out.println("Process new sentence -----");
-		    	out.println(sentence);
+			    //out.println("Process new sentence -----");
+		    	//out.println(sentence);
 		    	
  		    	List<String> word_list =new ArrayList<String>();
  		    	List<String> lemma_list=new ArrayList<String>();
@@ -264,20 +265,20 @@ public class FinbaseNLPPipeline {
 		    	System.out.println(dependencies);
 		    		
 		    
-		    	out.println("words:" + words);
-		    	out.println("lemma:" +lemma);
-		    	out.println("pos:"+pos_tags);
-		    	out.println("dependence:" + dependencies);
-		    	out.println("ner:"+ner_tags);
-		    	out.println();
+		    	//out.println("words:" + words);
+		    	//out.println("lemma:" +lemma);
+		    	//out.println("pos:"+pos_tags);
+		    	//out.println("dependence:" + dependencies);
+		    	//out.println("ner:"+ner_tags);
+		    	//out.println();
 		    	
 		    	this.insertSentences(document_id, sentence, words, lemma, pos_tags, dependencies, ner_tags, sentence_offset, sentence_id);
 			
 		    	sentence_offset++;
 		}
    
-		out.println();
-		out.println(); 	    
+		//out.println();
+		//out.println(); 	    
 	}
 
 	public static void main(String[] args) {

@@ -2,22 +2,22 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/ejml-0.23.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/javax.json.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/joda-time.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/jollyday.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/postgresql-9.4.1207.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/protobuf.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/slf4j-api.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/slf4j-simple.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/stanford-chinese-corenlp-2015-12-08-models.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/stanford-corenlp-3.6.0-models.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/stanford-corenlp-3.6.0.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/stanford-ner-3.6.0.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/stanford-ner.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/stanford-segmenter-3.6.0.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/xom-1.2.10-src.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/xom.jar"/>
-	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/cpdetector_1.0.6.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/cpdetector_1.0.6.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/ejml-0.23.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/javax.json.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/joda-time.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/jollyday.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/postgresql-9.4.1207.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/protobuf.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/slf4j-api.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/slf4j-simple.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/stanford-chinese-corenlp-2015-12-08-models.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/stanford-corenlp-3.6.0-models.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/stanford-corenlp-3.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/stanford-ner-3.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/stanford-ner.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/stanford-segmenter-3.6.0.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/xom-1.2.10-src.jar"/>
+	<classpathentry kind="lib" path="/Users/boboss/workspace/finbase1/lib/xom.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -58,6 +58,7 @@
               	
      <target name="SegmenterDIR">
              <java classname="cn.edu.zju.finbase.SegmenterDIR" failonerror="true" fork="yes">
+             	<jvmarg value="-mx1g"/> 
                         <classpath refid="finbase1.classpath"/>
                     </java>
      </target>

@@ -2,6 +2,7 @@ package cn.edu.zju.finbase;
 import info.monitorenter.cpdetector.io.*;
 import java.io.*;
 import java.net.MalformedURLException;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -81,18 +82,22 @@ public class SegmenterDIR {
 	        	
 	        	java.nio.charset.Charset charset = detector.detectCodepage(filename.toURL());		
 	        	String encoding=charset.toString();
-	        	System.out.println("========="+encoding + "===============\n");
+	        	if(encoding=="windows-1252") encoding="utf-16le";
+	        	System.out.println(filename.toString()+ "=========" + encoding + "===============\n");
 	        	
 		        if(filename.isFile() && filename.exists()){ //判断文件是否存在
 		            //读取每个文件内容
 		        	InputStreamReader read = new InputStreamReader(
-		            new FileInputStream(filename),"GBK");//考虑到编码格式
+		            new FileInputStream(filename),encoding);//考虑到编码格式
 		            BufferedReader bufferedReader = new BufferedReader(read);
 		            String temp=null;
 		            while((temp = bufferedReader.readLine()) != null){
 		             	sample +=temp;
-		                //System.out.println(temp);
 		            }
+		          //  byte[] tmp=sample.getBytes("windows-1252");//这里写原编码方式
+		            //sample=new String(tmp,"GBK");//这里写转换后的编码方式
+		            
+		            System.out.println(sample);
 		            read.close();	
 		            
 		        }else{
@@ -103,6 +108,17 @@ public class SegmenterDIR {
 		    		e.printStackTrace();	
 		   } 	
 		return sample;
+	}
+	
+	public void testEncoding(){
+		 File dir = new File(this.inputDir);
+		 File[] files = dir.listFiles();
+		
+		 for(int i=0;i<files.length;i++){
+				 this.readFiles(files[i]);
+		 }	
+		
+		 // System.out.println(Charset.availableCharsets().keySet());
 	}
 	
 	public void segmentDir() {
@@ -131,25 +147,30 @@ public class SegmenterDIR {
 	
 		        try{
 		        	
-		        	            	
-		        	    String fileContents = this.readFiles(files[i]);//IOUtils.slurpFile(files[i].toString(),charset.toString());
-				        System.out.println(fileContents);
+		        		java.nio.charset.Charset charset = detector.detectCodepage(files[i].toURL());// 检测文本的编码格式，可能是gb2312, window-1252等。	
+		        		String encoding=charset.toString();
+		        		if(encoding=="windows-1252") encoding="utf-16le"; //检测到的windows-1252编码实际上是utf-16le编码
+		        	    
+		        		String fileContents = IOUtils.slurpFile(files[i].toString(),encoding); //基于给定的编码读取文本内容。
+				        //System.out.println(fileContents);
 				        //完成分词
-				        List<String> segmented=segmenter.segmentString(fileContents);
-				        Iterator<String> it=segmented.iterator();
-				        String temp=" ";
-				        while(it.hasNext()) temp += (String) it.next() +" "; 
-				        //分词结果写入数据库 
-				        
-				        Statement st = con.createStatement();
-					    
-						//最后插入数据库
-						String sql = "insert into articles(text, file_name) values('"+ 
-									temp + "','"+ files[i].getName() +"')";
-						
-						System.out.println(sql);
-						st.executeUpdate(sql);
-						st.close();
+		        		if(fileContents!=null && fileContents.trim().length()>30){// 过滤掉太短的文本
+					        List<String> segmented=segmenter.segmentString(fileContents);
+					        Iterator<String> it=segmented.iterator();
+					        String temp=" ";
+					        while(it.hasNext()) temp += (String) it.next() +" "; 
+					        //分词结果写入数据库 
+					        
+					        Statement st = con.createStatement();
+						    
+							//最后插入数据库
+							String sql = "insert into articles(text, file_name) values('"+ 
+										temp + "','"+ files[i].getName() +"')";
+							
+							//System.out.println(sql);
+							st.executeUpdate(sql);
+							st.close();
+		        		}
 				        
 			    } catch (Exception e) {
 			    		System.out.println(e.getMessage());
@@ -209,7 +230,7 @@ public class SegmenterDIR {
 		*/
 		
 	    SegmenterDIR sg=new SegmenterDIR();
-
+	    //sg.testEncoding();
 	    sg.segmentDir();
 
 	}
