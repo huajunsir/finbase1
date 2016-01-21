@@ -18,5 +18,6 @@
 	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/stanford-segmenter-3.6.0.jar"/>
 	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/xom-1.2.10-src.jar"/>
 	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/xom.jar"/>
+	<classpathentry kind="lib" path="/Users/chenhuajun/workspace/finbase1/lib/cpdetector_1.0.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -27,15 +27,16 @@ for row in sys.stdin:
       index += 1
     if index != start_index:   # found a person from "start_index" to "index"
       text = ' '.join(words[start_index:index])
+      text=text.replace('-LRB-','(')
+      text=text.replace('-RRB-',')')
+      text=text.replace(' ','')
       length = index - start_index
       phrases.append((start_index, length, text))
     start_index = index + 1
 
   # Output a tuple for each PERSON phrase
   for start_position, length, text in phrases:
-        text=text.replace('-LRB-','')
-        text=text.replace('-RRB-','')
-    print ''.join(
+    print '\t'.join(
       [ str(x) for x in [
         sentence_id,
         start_position,   # start_position
