@@ -153,6 +153,11 @@ public class SegmenterDIR {
 		        	    
 		        		String fileContents = IOUtils.slurpFile(files[i].toString(),encoding); //基于给定的编码读取文本内容。
 				        //System.out.println(fileContents);
+		        		//byte[] tmp=fileContents.getBytes(encoding);
+		        		//fileContents=new String(tmp,"GBK");
+		        		fileContents=fileContents.replaceAll("", " ");
+		        		
+		        		//System.out.println(fileContents);
 				        //完成分词
 		        		if(fileContents!=null && fileContents.trim().length()>30){// 过滤掉太短的文本
 					        List<String> segmented=segmenter.segmentString(fileContents);
