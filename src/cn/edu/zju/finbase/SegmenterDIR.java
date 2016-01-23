@@ -19,7 +19,7 @@ public class SegmenterDIR {
 	String outputDir;
 	Connection con=null;
 	
-	int max_text_length=600000;
+	int max_text_length=100000;
 	
 	private static String basedir = "./nlp-tool/stanford-segmenter-2015-12-09/data";
 	CodepageDetectorProxy detector = CodepageDetectorProxy.getInstance(); // A singleton.
