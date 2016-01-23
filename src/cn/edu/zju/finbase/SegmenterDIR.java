@@ -19,7 +19,7 @@ public class SegmenterDIR {
 	String outputDir;
 	Connection con=null;
 	
-	int max_text_length=800000;
+	int max_text_length=600000;
 	
 	private static String basedir = "./nlp-tool/stanford-segmenter-2015-12-09/data";
 	CodepageDetectorProxy detector = CodepageDetectorProxy.getInstance(); // A singleton.
@@ -136,9 +136,10 @@ public class SegmenterDIR {
 
 		     //逐一处理待分词文件，并写入postgresql数据库
 		    for(int i=0;i<files.length;i++){
-		        System.out.println("---------对文件" + files[i].toString() + "进行分词------------------------");       
+		        System.out.println("----对文件" + files[i].toString() + "进行分词----已经处理了"+i+"个文件-----------------");       
 	
 		        if(files[i].length() > max_text_length) continue; //不处理过大的文本文件。
+		       
 		        try{
 		        	
 		        		java.nio.charset.Charset charset = detector.detectCodepage(files[i].toURL());// 检测文本的编码格式，可能是gb2312, window-1252等。	

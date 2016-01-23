@@ -29,7 +29,7 @@ public class FinbaseNLPPipeline {
 
 	StanfordCoreNLP pipeline;
 	Connection con=null;
-	String parse_maxlen="100";
+	String parse_maxlen="150";
 	int max_text_length = 100000;
 	int min_sentence_length =50;
 	
@@ -55,7 +55,7 @@ public class FinbaseNLPPipeline {
 	    props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/chinese-distsim/chinese-distsim.tagger");
 	    props.put("ssplit.newlineIsSentenceBreak", "always");
 	    props.put("ssplit.boundaryTokenRegex", "。");
-	    props.put("parse.model", "edu/stanford/nlp/models/lexparser/xinhuaFactored.ser.gz");
+	    props.put("parse.model", "edu/stanford/nlp/models/lexparser/xinhuaPCFG.ser.gz");
 	    props.put("parse.maxlen", parse_maxlen);
 	    //props.put("ssplit.tokenPatternsToDiscard", ",");
 	   

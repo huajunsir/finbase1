@@ -25,8 +25,14 @@ public class TestClass {
 		 for(int i=0;i<files.length;i++){
 				 String sample=this.readFiles(files[i]);
 				 
-				 if(sample.length()> 300000)
-				 System.out.println(files[i].getName() + ":"+ files[i].length() + ":" + sample.length());
+				 if(files[i].length()> 300000) 
+				 {
+					  System.out.println(files[i].getName() + ":"+ files[i].length() + ":" + sample.length());
+					  continue;
+				 }
+		         
+		         System.out.println("=======================\n\n\n");
+		 
 		 }	
 		
 	}
