@@ -19,6 +19,8 @@ public class SegmenterDIR {
 	String outputDir;
 	Connection con=null;
 	
+	int max_text_length=800000;
+	
 	private static String basedir = "./nlp-tool/stanford-segmenter-2015-12-09/data";
 	CodepageDetectorProxy detector = CodepageDetectorProxy.getInstance(); // A singleton.
 	//detector.add(new ParsingDetector(false));
@@ -110,16 +112,7 @@ public class SegmenterDIR {
 		return sample;
 	}
 	
-	public void testEncoding(){
-		 File dir = new File(this.inputDir);
-		 File[] files = dir.listFiles();
-		
-		 for(int i=0;i<files.length;i++){
-				 this.readFiles(files[i]);
-		 }	
-		
-		 // System.out.println(Charset.availableCharsets().keySet());
-	}
+	
 	
 	public void segmentDir() {
 		
@@ -145,6 +138,7 @@ public class SegmenterDIR {
 		    for(int i=0;i<files.length;i++){
 		        System.out.println("---------对文件" + files[i].toString() + "进行分词------------------------");       
 	
+		        if(files[i].length() > max_text_length) continue; //不处理过大的文本文件。
 		        try{
 		        	
 		        		java.nio.charset.Charset charset = detector.detectCodepage(files[i].toURL());// 检测文本的编码格式，可能是gb2312, window-1252等。	

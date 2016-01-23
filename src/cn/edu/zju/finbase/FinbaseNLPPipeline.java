@@ -29,6 +29,9 @@ public class FinbaseNLPPipeline {
 
 	StanfordCoreNLP pipeline;
 	Connection con=null;
+	String parse_maxlen="100";
+	int max_text_length = 100000;
+	int min_sentence_length =50;
 	
 	// For debug only  
 	PrintWriter out ;
@@ -50,8 +53,10 @@ public class FinbaseNLPPipeline {
 	    props.put("ner.useSUTime", false);
 	    props.put("ner.applyNumericClassifiers", false);
 	    props.put("pos.model", "edu/stanford/nlp/models/pos-tagger/chinese-distsim/chinese-distsim.tagger");
+	    props.put("ssplit.newlineIsSentenceBreak", "always");
 	    props.put("ssplit.boundaryTokenRegex", "。");
 	    props.put("parse.model", "edu/stanford/nlp/models/lexparser/xinhuaFactored.ser.gz");
+	    props.put("parse.maxlen", parse_maxlen);
 	    //props.put("ssplit.tokenPatternsToDiscard", ",");
 	   
 	    //创建文本处理流
@@ -180,6 +185,9 @@ public class FinbaseNLPPipeline {
 				String article_id=rs.getString(1);
 				String text=rs.getString( 2 );
 				String file_name=rs.getString(3);
+				
+				if(text.length()>max_text_length) continue; // 不处理过大的文本。 
+				
 				System.out.println("Processing article:" + article_id + ":"+file_name);
 				try {
 					this.annotateOneArticle(article_id, text);
@@ -226,8 +234,8 @@ public class FinbaseNLPPipeline {
 		for(CoreMap sentence_map:sentences){
 			    
 			    sentence=sentence_map.toString();
-			    //sentence=sentence.replace(',', ' '); //去掉“，”
-		    	
+			    
+			    if(sentence.length()<min_sentence_length) continue; //不处理长度小于5的句子。
 			    //out.println("Process new sentence -----");
 		    	//out.println(sentence);
 		    	
