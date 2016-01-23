@@ -136,7 +136,7 @@ public class SegmenterDIR {
 
 		     //逐一处理待分词文件，并写入postgresql数据库
 		    for(int i=0;i<files.length;i++){
-		        System.out.println("----对文件" + files[i].toString() + "进行分词----已经处理了"+i+"个文件-----------------");       
+		        System.out.println("-对文件" + files[i].toString() + "进行分词-大小:"+files[i].length()+"已处理"+i+"个文件--");       
 	
 		        if(files[i].length() > max_text_length) continue; //不处理过大的文本文件。
 		       
