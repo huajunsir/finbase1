@@ -33,6 +33,9 @@ public class FinbaseNLPPipeline {
 	int max_text_length = 100000;
 	int min_sentence_length =50;
 	
+	int start_id=171;
+	boolean init_sentence_table=false;
+	
 	// For debug only  
 	PrintWriter out ;
 	
@@ -83,25 +86,27 @@ public class FinbaseNLPPipeline {
 	        con = DriverManager.getConnection(url, dbprops);
 	        System.out.println("成功连接到数据库--------" + url);
 	        
-	       //先删除已有sentence表格，
-	    	Statement st = con.createStatement();
-	    	String sql = "DROP TABLE IF EXISTS sentences";
-			st.executeUpdate(sql);
-		
-			//再创建新的空表。
-			sql = "CREATE TABLE sentences(" +
-	  	          "document_id text,"+
-				  "sentence text,"+
-				  "words text[],"+
-				  "lemma text[],"+
-				  "pos_tags text[],"+
-				  "dependencies text[],"+
-				  "ner_tags text[],"+
-				  "sentence_offset bigint,"+
-				  "sentence_id text"+
-				  ")";
-			st.executeUpdate(sql);
-			st.close();
+	        if (init_sentence_table==true){
+		       //先删除已有sentence表格，
+		    	Statement st = con.createStatement();
+		    	String sql = "DROP TABLE IF EXISTS sentences";
+				st.executeUpdate(sql);
+			
+				//再创建新的空表。
+				sql = "CREATE TABLE sentences(" +
+		  	          "document_id text,"+
+					  "sentence text,"+
+					  "words text[],"+
+					  "lemma text[],"+
+					  "pos_tags text[],"+
+					  "dependencies text[],"+
+					  "ner_tags text[],"+
+					  "sentence_offset bigint,"+
+					  "sentence_id text"+
+					  ")";
+				st.executeUpdate(sql);
+				st.close();
+	        }
 			
 	    } catch (Exception e) {
 	    		System.out.println(e.getMessage());
@@ -156,11 +161,15 @@ public class FinbaseNLPPipeline {
 						sentence_id+ "')";
 			
 			out.println("成功插入文件"+file_name+"的sentence:"+sentence_id);
+			System.out.println("成功插入文件"+file_name+"的sentence:"+sentence_id);
 			st.executeUpdate(sql);
 			st.close();
+			st=null;
 	    } catch (SQLException e) {
 	    	
 			// TODO Auto-generated catch block
+	    	System.out.println(e.getMessage());
+	    	out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	    
@@ -177,7 +186,7 @@ public class FinbaseNLPPipeline {
 			st = con.createStatement();
 		
 			
-			String sql = " select * from articles " ;
+			String sql = " select * from articles where article_id>=" + start_id  +" order by article_id";
 			
 			ResultSet rs = st.executeQuery(sql);
 		
@@ -191,12 +200,14 @@ public class FinbaseNLPPipeline {
 				
 				if(text.length()>max_text_length) continue; // 不处理过大的文本。 
 				
-				out.println("开始处理第" + article_id + "个文件:"+file_name+"文件大小："+ text.length());
+				out.println("开始处理第" + article_id + "个文件:"+file_name+"--文件大小："+ text.length());
 				
 				try {
 					this.annotateOneArticle(article_id, text,file_name);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
+					System.out.println(e.getMessage());
+					out.println(e.getMessage());
 					e.printStackTrace();
 				}
 				
@@ -206,6 +217,8 @@ public class FinbaseNLPPipeline {
 			out.flush(); 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+			out.println(e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -280,6 +293,7 @@ public class FinbaseNLPPipeline {
 		    	
 		    	//generate dependences;
 		    	SemanticGraph graph = sentence_map.get(SemanticGraphCoreAnnotations.CollapsedCCProcessedDependenciesAnnotation.class);
+		    	if(graph==null) continue;
 		    	dependencies="{\"" +graph.toList()+ "\"}";
 		        CharSequence cs1= "\n";
 		        CharSequence cs2="\",\"";
