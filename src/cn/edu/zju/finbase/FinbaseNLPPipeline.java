@@ -74,14 +74,14 @@ public class FinbaseNLPPipeline {
 	                     new FileInputStream(file));//考虑到编码格式
 	        BufferedReader bufferedReader = new BufferedReader(read);
 	        String url = "jdbc:"+ bufferedReader.readLine();
-	        System.out.println("连接到数据库。。。。" + url);
+	        
 	        read.close();
 	      
 	        Properties dbprops = new Properties();
 	       // props.setProperty("user","boboss");
 	       // props.setProperty("password","");
 	        con = DriverManager.getConnection(url, dbprops);
-	        
+	        System.out.println("成功连接到数据库--------" + url);
 	        
 	       //先删除已有sentence表格，
 	    	Statement st = con.createStatement();
@@ -136,7 +136,7 @@ public class FinbaseNLPPipeline {
 								String dependencies,
 								String ner_tags, 
 								int sentence_offset,
-								String sentence_id){
+								String sentence_id,String file_name){
 		
 			
 	    try {
@@ -155,7 +155,7 @@ public class FinbaseNLPPipeline {
 						sentence_offset +"','" +
 						sentence_id+ "')";
 			
-			out.println(sql);
+			out.println("成功插入文件"+file_name+"的sentence:"+sentence_id);
 			st.executeUpdate(sql);
 			st.close();
 	    } catch (SQLException e) {
@@ -176,8 +176,11 @@ public class FinbaseNLPPipeline {
 		try {
 			st = con.createStatement();
 		
+			
 			String sql = " select * from articles " ;
+			
 			ResultSet rs = st.executeQuery(sql);
+		
 			
 			while (rs.next())
 			{
@@ -188,9 +191,9 @@ public class FinbaseNLPPipeline {
 				
 				if(text.length()>max_text_length) continue; // 不处理过大的文本。 
 				
-				System.out.println("Processing article:" + article_id + ":"+file_name);
+				out.println("开始处理第" + article_id + "个文件:"+file_name+"文件大小："+ text.length());
 				try {
-					this.annotateOneArticle(article_id, text);
+					this.annotateOneArticle(article_id, text,file_name);
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -207,8 +210,13 @@ public class FinbaseNLPPipeline {
 		
 	}
 	
-	private void annotateOneArticle(String article_id, String text) throws FileNotFoundException{
+	
+	private void annotateOneArticle(String article_id, String text, String file_name) throws FileNotFoundException{
 		//把所有的","换成中文的逗号，避免转换成数组之后发生符号冲突。
+		if(text==null) {
+			out.println("！！！--------------无法处理空文本, 文件名是："+file_name );
+			return;
+		}
 		text=text.replaceAll(",","");
 		
 		String document_id=article_id;
@@ -229,11 +237,19 @@ public class FinbaseNLPPipeline {
 		
 		pipeline.annotate(annotation);
 
+		//out.println("！！！--------------annotation返回为空，使用pipeline标注异常, 文件名是："+ file_name);
+
+		
 		//读取每一个sentence，获取词列表、POS 列表、NER列表、语法分析树等。
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
 		for(CoreMap sentence_map:sentences){
 			    
 			    sentence=sentence_map.toString();
+			    
+			    if(sentence==null){
+			    	out.println("！！！--------------sentence为空,文件名是："+ file_name);
+			    	return;
+			    }
 			    
 			    if(sentence.length()<min_sentence_length) continue; //不处理长度小于5的句子。
 			    //out.println("Process new sentence -----");
@@ -268,25 +284,14 @@ public class FinbaseNLPPipeline {
 		        cs1="\",\"\"";
 		        cs2="\"";
 		    	dependencies= dependencies.replace(cs1,cs2);//去掉尾部多余的\",\""符号
-		       
-		       
-		    	System.out.println(dependencies);
-		    		
-		    
-		    	//out.println("words:" + words);
-		    	//out.println("lemma:" +lemma);
-		    	//out.println("pos:"+pos_tags);
-		    	//out.println("dependence:" + dependencies);
-		    	//out.println("ner:"+ner_tags);
-		    	//out.println();
 		    	
-		    	this.insertSentences(document_id, sentence, words, lemma, pos_tags, dependencies, ner_tags, sentence_offset, sentence_id);
+		    	this.insertSentences(document_id, sentence, words, lemma, pos_tags, dependencies, ner_tags, sentence_offset, sentence_id,file_name);
 			
 		    	sentence_offset++;
 		}
    
-		//out.println();
-		//out.println(); 	    
+		out.println();
+		out.println(); 	    
 	}
 
 	public static void main(String[] args) {
