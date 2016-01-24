@@ -192,6 +192,7 @@ public class FinbaseNLPPipeline {
 				if(text.length()>max_text_length) continue; // 不处理过大的文本。 
 				
 				out.println("开始处理第" + article_id + "个文件:"+file_name+"文件大小："+ text.length());
+				
 				try {
 					this.annotateOneArticle(article_id, text,file_name);
 				} catch (FileNotFoundException e) {
@@ -229,7 +230,9 @@ public class FinbaseNLPPipeline {
 		int sentence_offset=0;
 		String sentence_id= "";
 		
-	    out.println("Start to annotate:" + article_id + "...................");
+		System.out.println("开始处理第" + article_id + "个文件:"+file_name+"文件大小："+ text.length());
+		
+	    //out.println("Start to annotate:" + article_id + "...................");
 		//out.println(text);
 		
 		// Initialize an Annotation with some text to be annotated. The text is the argument to the constructor.
