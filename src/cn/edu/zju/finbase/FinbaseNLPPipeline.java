@@ -33,7 +33,7 @@ public class FinbaseNLPPipeline {
 	int max_text_length = 100000;
 	int min_sentence_length =50;
 	
-	int start_id=171;
+	int start_id=173;
 	boolean init_sentence_table=false;
 	
 	// For debug only  
