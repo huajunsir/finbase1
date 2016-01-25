@@ -52,7 +52,7 @@
 
     <target name="FinbaseNLPPipeline">
         <java classname="cn.edu.zju.finbase.FinbaseNLPPipeline" failonerror="true" fork="yes">
-        	<jvmarg value="-mx3.9G"/> 
+        	<jvmarg value="-mx4G"/> 
             <classpath refid="finbase1.classpath"/>
         </java>
     </target>
