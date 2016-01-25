@@ -27,20 +27,21 @@ import edu.stanford.nlp.util.*;
 
 public class FinbaseNLPPipeline {
 
-	StanfordCoreNLP pipeline;
-	Connection con=null;
+	
 	String parse_maxlen="150";
 	int max_text_length = 100000;
 	int min_sentence_length =50;
+	int start_id=218;  // 用于设置起始文档id。
+	boolean init_sentence_table=false; // 如要重建Sentence table，设置为true，如果继续添加，设置为false
 	
-	int start_id=179;
-	boolean init_sentence_table=false;
+	StanfordCoreNLP pipeline;
+	Connection con=null;
 	
 	// For debug only  
 	PrintWriter out ;
 	
 	public FinbaseNLPPipeline() {
-		init();//init db connection.
+		init();   //init db connection.
 	}
 	
 	/**
@@ -141,7 +142,8 @@ public class FinbaseNLPPipeline {
 								String dependencies,
 								String ner_tags, 
 								int sentence_offset,
-								String sentence_id,String file_name){
+								String sentence_id,
+								String file_name){
 		
 			
 	    try {
@@ -160,7 +162,7 @@ public class FinbaseNLPPipeline {
 						sentence_offset +"','" +
 						sentence_id+ "')";
 			
-			out.println("成功插入文件"+file_name+"的sentence:"+sentence_id);
+			//out.println("成功插入文件"+file_name+"的sentence:"+sentence_id);
 			System.out.println("成功插入文件"+file_name+"的sentence:"+sentence_id);
 			st.executeUpdate(sql);
 			st.close();
@@ -200,7 +202,7 @@ public class FinbaseNLPPipeline {
 				
 				if(text.length()>max_text_length) continue; // 不处理过大的文本。 
 				
-				out.println("开始处理第" + article_id + "个文件:"+file_name+"--文件大小："+ text.length());
+				//out.println("开始处理第" + article_id + "个文件:"+file_name+"--文件大小："+ text.length());
 				
 				try {
 					this.annotateOneArticle(article_id, text,file_name);
@@ -214,7 +216,7 @@ public class FinbaseNLPPipeline {
 			} 
 			rs.close();	
 			st.close();
-			out.flush(); 
+			//out.flush(); 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.getMessage());
@@ -243,11 +245,8 @@ public class FinbaseNLPPipeline {
 		int sentence_offset=0;
 		String sentence_id= "";
 		
-		System.out.println("开始处理第" + article_id + "个文件:"+file_name+"文件大小："+ text.length());
-		
-	    //out.println("Start to annotate:" + article_id + "...................");
-		//out.println(text);
-		
+		System.out.println("开始处理第" + article_id + "个文件:"+file_name+"---文件大小："+ text.length());
+
 		// Initialize an Annotation with some text to be annotated. The text is the argument to the constructor.
 		Annotation annotation=new Annotation(text);
 		
@@ -307,8 +306,8 @@ public class FinbaseNLPPipeline {
 		    	sentence_offset++;
 		}
    
-		out.println();
-		out.println(); 	    
+		//out.println();
+		//out.println(); 	    
 	}
 
 	public static void main(String[] args) {
