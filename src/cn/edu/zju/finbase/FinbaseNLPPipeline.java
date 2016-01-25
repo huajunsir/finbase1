@@ -31,7 +31,7 @@ public class FinbaseNLPPipeline {
 	String parse_maxlen="150";
 	int max_text_length = 100000;
 	int min_sentence_length =50;
-	int start_id=218;  // 用于设置起始文档id。
+	int start_id=323;  // 用于设置起始文档id。
 	boolean init_sentence_table=false; // 如要重建Sentence table，设置为true，如果继续添加，设置为false
 	
 	StanfordCoreNLP pipeline;
@@ -167,6 +167,7 @@ public class FinbaseNLPPipeline {
 			st.executeUpdate(sql);
 			st.close();
 			st=null;
+			sql=null;
 	    } catch (SQLException e) {
 	    	
 			// TODO Auto-generated catch block
@@ -257,6 +258,7 @@ public class FinbaseNLPPipeline {
 		
 		//读取每一个sentence，获取词列表、POS 列表、NER列表、语法分析树等。
 		List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+		
 		for(CoreMap sentence_map:sentences){
 			    
 			    sentence=sentence_map.toString();
@@ -303,9 +305,24 @@ public class FinbaseNLPPipeline {
 		    	
 		    	this.insertSentences(document_id, sentence, words, lemma, pos_tags, dependencies, ner_tags, sentence_offset, sentence_id,file_name);
 			
+		    	sentence=null;
+		    	words=null;
+		    	lemma=null;
+		    	pos_tags=null;
+		    	dependencies=null;
+		    	ner_tags=null;
+		    	graph=null;
+		    	word_list=null;
+		    	lemma_list=null;
+		    	pos_list=null;
+		    	ner_list=null;
+		    	
 		    	sentence_offset++;
 		}
-   
+        annotation=null;
+        sentences=null;
+		System.gc();
+		System.out.println("当前可用内存："+ Runtime.getRuntime().freeMemory()+"--最大内存" + Runtime.getRuntime().maxMemory()+"--total:" +Runtime.getRuntime().totalMemory());
 		//out.println();
 		//out.println(); 	    
 	}
