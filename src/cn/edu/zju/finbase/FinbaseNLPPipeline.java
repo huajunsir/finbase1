@@ -31,7 +31,7 @@ public class FinbaseNLPPipeline {
 	String parse_maxlen="150";
 	int max_text_length = 100000;
 	int min_sentence_length =50;
-	int start_id=330;  // 用于设置起始文档id。
+	int start_id=335;  // 用于设置起始文档id。
 	boolean init_sentence_table=false; // 如要重建Sentence table，设置为true，如果继续添加，设置为false
 	
 	StanfordCoreNLP pipeline;
