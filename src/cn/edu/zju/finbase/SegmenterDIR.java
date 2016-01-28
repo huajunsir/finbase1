@@ -15,15 +15,15 @@ import edu.stanford.nlp.ling.CoreLabel;
 
 public class SegmenterDIR {
 	
-	String inputDir="./inputtxt";
-	String outputDir;
-	Connection con=null;
-	
-	int max_text_length=100000;
-	
+	private static String inputDir="./inputtxt"; //带分词的文本目录
 	private static String basedir = "./nlp-tool/stanford-segmenter-2015-12-09/data";
+	private static String article_type="交易";
+	private static String publish_date="2015-01-01";
+	
+	int max_text_length=300000; //控制文件大小
+	
+	Connection con=null;
 	CodepageDetectorProxy detector = CodepageDetectorProxy.getInstance(); // A singleton.
-	//detector.add(new ParsingDetector(false));
 	
 	/*
 	 * input: input dir
@@ -64,7 +64,9 @@ public class SegmenterDIR {
 			sql = "CREATE TABLE articles(" +
 	  	          "article_id serial,"+
 				  "text text," +
-	  	          "file_name text" +
+	  	          "file_name text," +
+				  "article_type text," + 
+	  	          "publish_date text" +
 				  ")";
 			st.executeUpdate(sql);
 			st.close();
@@ -78,7 +80,7 @@ public class SegmenterDIR {
 
 	
 	public String readFiles(File filename){
-		String sample=null;
+		String sample="";
 		try {
 	        	
 	        	
@@ -92,14 +94,15 @@ public class SegmenterDIR {
 		        	InputStreamReader read = new InputStreamReader(
 		            new FileInputStream(filename),encoding);//考虑到编码格式
 		            BufferedReader bufferedReader = new BufferedReader(read);
-		            String temp=null;
+		            String temp="";
 		            while((temp = bufferedReader.readLine()) != null){
-		             	sample +=temp;
+		             	sample +=temp + "\n";
 		            }
-		          //  byte[] tmp=sample.getBytes("windows-1252");//这里写原编码方式
+		          
+		            //byte[] tmp=sample.getBytes("windows-1252");//这里写原编码方式
 		            //sample=new String(tmp,"GBK");//这里写转换后的编码方式
 		            
-		            System.out.println(sample);
+		           // System.out.println(sample);
 		            read.close();	
 		            
 		        }else{
@@ -135,11 +138,12 @@ public class SegmenterDIR {
 		    File[] files = dir.listFiles();
 
 		     //逐一处理待分词文件，并写入postgresql数据库
+		  
 		    for(int i=0;i<files.length;i++){
-		        System.out.println("-对文件" + files[i].toString() + "进行分词-大小:"+files[i].length()+"已处理"+i+"个文件--");       
+		        System.out.println("-对文件" + files[i].toString() + "-进行分词-文件大小:"+files[i].length()+"已处理"+i+"个文件--");       
 	
 		        if(files[i].length() > max_text_length) continue; //不处理过大的文本文件。
-		       
+		           
 		        try{
 		        	
 		        		java.nio.charset.Charset charset = detector.detectCodepage(files[i].toURL());// 检测文本的编码格式，可能是gb2312, window-1252等。	
@@ -147,12 +151,10 @@ public class SegmenterDIR {
 		        		if(encoding=="windows-1252") encoding="utf-16le"; //检测到的windows-1252编码实际上是utf-16le编码
 		        	    
 		        		String fileContents = IOUtils.slurpFile(files[i].toString(),encoding); //基于给定的编码读取文本内容。
-				        //System.out.println(fileContents);
-		        		//byte[] tmp=fileContents.getBytes(encoding);
-		        		//fileContents=new String(tmp,"GBK");
+				
 		        		fileContents=fileContents.replaceAll("", " ");
-		        		
-		        		//System.out.println(fileContents);
+		        		//fileContents=fileContents.replaceAll("", " ");
+		        
 				        //完成分词
 		        		if(fileContents!=null && fileContents.trim().length()>30){// 过滤掉太短的文本
 					        List<String> segmented=segmenter.segmentString(fileContents);
@@ -164,8 +166,8 @@ public class SegmenterDIR {
 					        Statement st = con.createStatement();
 						    
 							//最后插入数据库
-							String sql = "insert into articles(text, file_name) values('"+ 
-										temp + "','"+ files[i].getName() +"')";
+							String sql = "insert into articles(text, file_name, article_type, publish_date) values('"+ 
+										temp + "','"+ files[i].getName() +"','"+ article_type+"','"+ publish_date +"')";
 							
 							//System.out.println(sql);
 							st.executeUpdate(sql);
