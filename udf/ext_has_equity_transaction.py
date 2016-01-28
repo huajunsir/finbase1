@@ -45,7 +45,7 @@ for row in sys.stdin:
   elif (p1_text == p2_text) or (p1_text in p2_text) or (p2_text in p1_text):
     is_true = '0'
   # DS rule 4 false if they are both married, but not married to each other:
-  elif p1_text_lower in related_companies and p2_text_lower in related_companies:
+  # elif p1_text_lower in related_companies and p2_text_lower in related_companies:
     is_true = '0'
 
   # Output relation candidates into output table
