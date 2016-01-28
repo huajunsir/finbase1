@@ -8,7 +8,7 @@ APP_HOME = os.environ['FINBASE_HOME']
 # A person can have multiple spouses
 has_equity_transactions = set()
 related_companies = set()
-lines = open(APP_HOME + '/data/labeled/equity_transaction.csv').readlines()
+lines = open(APP_HOME + '/data/labeled/jiaoyi.csv').readlines()
 for line in lines:
   name1, name2, relation = line.strip().split('\t')
   has_equity_transactions.add((name1, name2))  # Add a spouse relation pair
