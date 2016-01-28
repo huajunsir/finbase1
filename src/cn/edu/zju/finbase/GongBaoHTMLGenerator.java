@@ -25,8 +25,8 @@ public class GongBaoHTMLGenerator {
 		//交易:http://xinpi.cs.com.cn/new/search.html?t=b&st=2016-01-25&et=2016-01-27&c=&q=&m=012001&s=0117
 		//股权变动: http://xinpi.cs.com.cn/new/search.html?t=b&st=2016-01-25&et=2016-01-27&c=&q=&m=012001&s=0115 
 		//业绩预告：http://xinpi.cs.com.cn/new/search.html?t=b&st=2016-01-25&et=2016-01-27&c=&q=&m=012001&s=012111
-		String reportType="yeji";
-		String tail="&c=&q=&m=012001&s=012111";
+		String reportType="jiaoyi";
+		String tail="&c=&q=&m=012001&s=0117";
 		
 		
 		File folder=new File("data/spider/zhongzheng/"+reportType);
@@ -36,7 +36,7 @@ public class GongBaoHTMLGenerator {
 			
 			StringBuilder sb = new StringBuilder();  
 		  
-		    PrintStream printStream = new PrintStream(new FileOutputStream("data/spider/zhongzheng/"+reportType+"/"+i+"_jiaoyi_hushi.html"));  
+		    PrintStream printStream = new PrintStream(new FileOutputStream("data/spider/zhongzheng/"+reportType+"/"+i+"_"+reportType+"_hushi.html"));  
 		    sb.append("<html>");  
 		    sb.append("<head>");  
 		    sb.append("<meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />");
