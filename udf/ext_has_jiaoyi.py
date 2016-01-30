@@ -6,22 +6,22 @@ APP_HOME = os.environ['FINBASE_HOME']
 
 # Load the spouse dictionary for distant supervision.
 # A person can have multiple spouses
-has_equity_transactions = set()
+has_jiaoyi = set()
 related_companies = set()
-lines = open(APP_HOME + '/data/labeled/jiaoyi.csv').readlines()
-for line in lines:
-  name1, name2, relation = line.strip().split('\t')
-  has_equity_transactions.add((name1, name2))  # Add a spouse relation pair
+lines = open(APP_HOME + '/data/labeled/guquan_jiaoyi.csv').readlines()
+for line in lines: 
+  name1, name2, relation = line.strip().split(',')[0:3]
+  has_jiaoyi.add((name1, name2))  # Add a spouse relation pair
   related_companies.add(name1)    # Record the person as married
   related_companies.add(name2)
-
-# Load relations of people that are not spouse
-# The non-spouse KB lists incompatible relations, e.g. childrens, siblings, parents.
-#non_equity_transactions = set()
-#lines = open(FINBASE_HOME + '/data/labeled/non-spouses.tsv').readlines()
-#for line in lines:
- # name1, name2, relation = line.strip().split('\t')
-  # non_equity_transactions.add((name1, name2))  # Add a non-spouse relation pair
+  
+  # Load relations of people that are not spouse
+  # The non-spouse KB lists incompatible relations, e.g. childrens, siblings, parents.
+non_jiaoyi = set()
+lines = open(APP_HOME + '/data/labeled/mu_gongsi.csv').readlines()
+for line in lines:
+    name1, name2, relation = line.strip().split(',')[0:3]
+    non_jiaoyi.add((name1, name2))  # Add a non-spouse relation pair
 
 # For each input tuple
 for row in sys.stdin:
@@ -35,12 +35,12 @@ for row in sys.stdin:
 
   # DS rule 1: true if they appear in spouse KB, false if they appear in non-spouse KB
   is_true = '\N'
-  if (p1_text_lower, p2_text_lower) in has_equity_transactions or \
-     (p2_text_lower, p1_text_lower) in has_equity_transactions:
+  if (p1_text_lower, p2_text_lower) in has_jiaoyi or \
+     (p2_text_lower, p1_text_lower) in has_jiaoyi:
     is_true = '1'
-  # elif (p1_text_lower, p2_text_lower) in non_spouses or \
-  #     (p2_text_lower, p1_text_lower) in non_spouses:
-  #  is_true = '0'
+  elif (p1_text_lower, p2_text_lower) in non_jiaoyi or \
+       (p2_text_lower, p1_text_lower) in non_jiaoyi:
+    is_true = '0'
   # DS rule 3: false if they appear to be in same person
   elif (p1_text == p2_text) or (p1_text in p2_text) or (p2_text in p1_text):
     is_true = '0'
