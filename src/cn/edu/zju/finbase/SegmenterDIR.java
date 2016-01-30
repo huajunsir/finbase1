@@ -41,7 +41,7 @@ public class SegmenterDIR {
 	    //初始化数据库连接
 		try {
 			
-			File file=new File("./db.url");
+			File file=new File("./db_finbase.url");
             //读取每个文件内容
             InputStreamReader read = new InputStreamReader(
                      new FileInputStream(file));//考虑到编码格式
