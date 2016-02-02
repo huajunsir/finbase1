@@ -27,7 +27,7 @@ import edu.stanford.nlp.util.*;
 
 public class FinbaseNLPPipeline {
 
-	int start_id=789;  // 用于设置起始文档id。
+	int start_id=1883;  // 用于设置起始文档id。
 	
 	String parse_maxlen="150";
 	int max_text_length = 200000;
