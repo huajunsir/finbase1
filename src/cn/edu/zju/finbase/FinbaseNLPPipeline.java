@@ -28,6 +28,21 @@ import edu.stanford.nlp.util.*;
 public class FinbaseNLPPipeline {
 
 	int start_id=1;  // 用于设置起始文档id。
+	boolean init_sentence_table=false; // 如要重建Sentence table，设置为true，如果继续添加，设置为false
+	String db_url=""; //数据库名称；
+	String parse_maxlen="150"; //default
+	int max_text_length = 200000; //default
+	int min_sentence_length =50; //default
+	
+	StanfordCoreNLP pipeline;
+	Connection con=null;
+	
+	// For debug only  
+	PrintWriter out ;
+	
+	public FinbaseNLPPipeline() {
+		//init();   //init db connection.
+	}
 	
 	public int getStart_id() {
 		return start_id;
@@ -68,22 +83,13 @@ public class FinbaseNLPPipeline {
 	public void setInit_sentence_table(boolean init_sentence_table) {
 		this.init_sentence_table = init_sentence_table;
 	}
+	
+	public String getDb_url() {
+		return db_url;
+	}
 
-	String parse_maxlen="150"; //default
-	int max_text_length = 200000; //default
-	int min_sentence_length =50; //default
-	
-	boolean init_sentence_table=false; // 如要重建Sentence table，设置为true，如果继续添加，设置为false
-	
-	
-	StanfordCoreNLP pipeline;
-	Connection con=null;
-	
-	// For debug only  
-	PrintWriter out ;
-	
-	public FinbaseNLPPipeline() {
-		init();   //init db connection.
+	public void setDb_url(String db_url) {
+		this.db_url = db_url;
 	}
 	
 	/**
@@ -114,21 +120,22 @@ public class FinbaseNLPPipeline {
 			//for debug only
 			out=new PrintWriter("./debug_output");
 			
-        	File file=new File("./db_nlp.url");
+        	//File file=new File("./db_nlp.url");
 	            //读取每个文件内容
-	        InputStreamReader read = new InputStreamReader(
-	                     new FileInputStream(file));//考虑到编码格式
-	        BufferedReader bufferedReader = new BufferedReader(read);
-	        String url = "jdbc:"+ bufferedReader.readLine();
-	        
-	        read.close();
+	        //InputStreamReader read = new InputStreamReader(
+	          //           new FileInputStream(file));//考虑到编码格式
+	        //BufferedReader bufferedReader = new BufferedReader(read);
+	       
+			String url = "jdbc:"+ db_url;
+		    
+	        //read.close();
 	      
 	        Properties dbprops = new Properties();
-	       // props.setProperty("user","boboss");
-	       // props.setProperty("password","");
+	        props.setProperty("user","root");
+	        props.setProperty("password","");
 	        con = DriverManager.getConnection(url, dbprops);
 	        System.out.println("成功连接到数据库--------" + url);
-	        
+			   
 	        if (init_sentence_table==true){
 		       //先删除已有sentence表格，
 		    	Statement st = con.createStatement();
@@ -137,7 +144,7 @@ public class FinbaseNLPPipeline {
 			
 				//再创建新的空表。
 				sql = "CREATE TABLE sentences(" +
-		  	          "document_id text,"+
+		  	          "document_id bigint,"+
 					  "sentence text,"+
 					  "words text[],"+
 					  "lemma text[],"+
@@ -371,9 +378,20 @@ public class FinbaseNLPPipeline {
 
 	public static void main(String[] args) {
 		FinbaseNLPPipeline fp=new FinbaseNLPPipeline();
-		fp.setStart_id(Integer.valueOf(args[0]));
-		fp.setInit_sentence_table(Boolean.valueOf(args[1]));
-		fp.annotateAllArticles();
+		if(args.length<3) {
+			System.out.println("请输入至少三个参数（按顺序）：数据库的连接字符串，起始文档id，是否重新初始化sentence表");
+		
+		}else{
+			fp.setDb_url(args[0]);
+			fp.setStart_id(Integer.valueOf(args[1]));
+			fp.setInit_sentence_table(Boolean.valueOf(args[2]));
+			fp.init();
+			fp.annotateAllArticles();
+			//System.out.println(args[0]);
+		}
+
 	}
+
+
 
 }

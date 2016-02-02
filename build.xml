@@ -54,11 +54,10 @@
         <java classname="cn.edu.zju.finbase.FinbaseNLPPipeline" failonerror="true" fork="yes">
         	<jvmarg value="-mx5G"/> 
         	 <!-- 设置起始文档ID, 缺省为1 -->
-        	 <arg value="1883" />
+        	<arg value="postgresql://localhost/finbase" />
+        	<arg value="199" />
         	 <!-- 设置是否初始化sentencetable，缺省为不初始化，即：新的运行只加入到现有表中，不清除数据 -->  
         	<arg value="false" />
-        		
-        	
             <classpath refid="finbase1.classpath"/>
         </java>
     </target>
