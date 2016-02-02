@@ -17,11 +17,12 @@ import edu.stanford.nlp.ling.CoreLabel;
 
 
 public class SegmenterDIR {
-	
-	private static String inputDir="./inputtxt"; //带分词的文本目录
-	private static String basedir = "./nlp-tool/stanford-segmenter-2015-12-09/data";
-	private static String article_type="交易";
-	private static String publish_date="2015-01-01";
+	private String db_url="";
+	private String inputDir=""; //分词的文本目录
+	private String basedir = "./nlp-tool/stanford-segmenter-2015-12-09/data";
+	private String article_type="";
+	private String publish_date="2015-01-01";
+	private boolean init_table=false;
 	
 	int max_text_length=300000; //控制文件大小
 	
@@ -33,7 +34,7 @@ public class SegmenterDIR {
 	 * output: output dir
 	 */
 	public SegmenterDIR() {
-		init();
+		
 	}
 	
     private void init(){	
@@ -44,35 +45,33 @@ public class SegmenterDIR {
 	    //初始化数据库连接
 		try {
 			
-			File file=new File("./db.url");
-            //读取每个文件内容
-            InputStreamReader read = new InputStreamReader(
-                     new FileInputStream(file));//考虑到编码格式
-            BufferedReader bufferedReader = new BufferedReader(read);
-            String url = "jdbc:"+ bufferedReader.readLine();
-            System.out.println("连接到数据库。。。。" + url);
-            read.close();
-        
+			String url = "jdbc:"+ db_url;
+		    
+	        //read.close();
+	      
 	        Properties dbprops = new Properties();
-	        //dbprops.setProperty("user","boboss");
+	        //dbprops.setProperty("user","root");
 	        //dbprops.setProperty("password","");
 	        con = DriverManager.getConnection(url, dbprops);
-	        
-	        //先删除已有sentence表格，
-	    	Statement st = con.createStatement();
-	    	String sql = "DROP TABLE IF EXISTS articles";
-			st.executeUpdate(sql);
-		
-			//再创建新的空表。
-			sql = "CREATE TABLE articles(" +
-	  	          "article_id serial,"+
-				  "text text," +
-	  	          "file_name text," +
-				  "article_type text," + 
-	  	          "publish_date text" +
-				  ")";
-			st.executeUpdate(sql);
-			st.close();
+	        System.out.println("成功连接到数据库--------" + url);
+			 
+	        if(init_table==true){
+		        //先删除已有sentence表格，
+		    	Statement st = con.createStatement();
+		    	String sql = "DROP TABLE IF EXISTS articles";
+				st.executeUpdate(sql);
+			
+				//再创建新的空表。
+				sql = "CREATE TABLE articles(" +
+		  	          "article_id serial,"+
+					  "text text," +
+		  	          "file_name text," +
+					  "article_type text," + 
+		  	          "publish_date text" +
+					  ")";
+				st.executeUpdate(sql);
+				st.close();
+	        }
 			
 	    } catch (Exception e) {
 	    		System.out.println(e.getMessage());
@@ -242,36 +241,70 @@ public class SegmenterDIR {
 	
 	
 	public static void main(String[] args) {
-		/*
-		String input=null;
-		String output=null;
-		
-		if(args.length==0){
-			input ="./";
-			output="./";
-		}
-		else if (args.length==1){
-			input = args[0];
-			output="./";
-		}
-		else if (args.length==2){
-			input=args[0];
-			output=args[1];
-		}
-		else {
-			System.out.println("请使用正确的调用格式：java Segmenter -inputdir -outputdir");
-		}
-		*/
+
 		
 	    SegmenterDIR sg=new SegmenterDIR();
-	    try {
-			sg.getPublishDate("");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	    if(args.length<6) {
+			System.out.println("请输入至少三个参数（按顺序）：数据库的连接字符串，文档类型，输入文件目录，分词器目录，最大文件大小，是否重新初始化数据库");
+		}else{
+			sg.setDb_url(args[0]);
+			sg.setArticle_type(args[1]);
+			sg.setInputDir(args[2]);
+			sg.setBasedir(args[3]);
+			sg.setMax_text_length(Integer.valueOf(args[4]));
+			sg.setInit_table(Boolean.valueOf(args[5]));
+			sg.init();
+			sg.segmentDir();
 		}
-	    //sg.segmentDir();
 
+	}
+
+	public String getDb_url() {
+		return db_url;
+	}
+
+	public void setDb_url(String db_url) {
+		this.db_url = db_url;
+	}
+
+	public String getInputDir() {
+		return inputDir;
+	}
+
+	public void setInputDir(String inputDir) {
+		this.inputDir = inputDir;
+	}
+
+	public String getBasedir() {
+		return basedir;
+	}
+
+	public void setBasedir(String basedir) {
+		this.basedir = basedir;
+	}
+
+	public String getArticle_type() {
+		return article_type;
+	}
+
+	public void setArticle_type(String article_type) {
+		this.article_type = article_type;
+	}
+
+	public boolean isInit_table() {
+		return init_table;
+	}
+
+	public void setInit_table(boolean init_table) {
+		this.init_table = init_table;
+	}
+
+	public int getMax_text_length() {
+		return max_text_length;
+	}
+
+	public void setMax_text_length(int max_text_length) {
+		this.max_text_length = max_text_length;
 	}
 
 }

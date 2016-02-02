@@ -131,8 +131,8 @@ public class FinbaseNLPPipeline {
 	        //read.close();
 	      
 	        Properties dbprops = new Properties();
-	        props.setProperty("user","root");
-	        props.setProperty("password","");
+	        dbprops.setProperty("user","root");
+	        dbprops.setProperty("password","");
 	        con = DriverManager.getConnection(url, dbprops);
 	        System.out.println("成功连接到数据库--------" + url);
 			   

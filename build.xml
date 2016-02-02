@@ -1,72 +1,90 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!-- WARNING: Eclipse auto-generated file.
-              Any modifications will be overwritten.
-              To include a user specific buildfile here, simply create one in the same
-              directory with the processing instruction <?eclipse.ant.import?>
-              as the first entry and export the buildfile again. --><project basedir="." default="build" name="finbase1">
-    <property environment="env"/>
-    <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.8"/>
-    <property name="source" value="1.8"/>
-    <path id="finbase1.classpath">
-        <pathelement location="bin"/>
-        <pathelement location="lib/ejml-0.23.jar"/>
-        <pathelement location="lib/javax.json.jar"/>
-        <pathelement location="lib/joda-time.jar"/>
-        <pathelement location="lib/jollyday.jar"/>
-        <pathelement location="lib/postgresql-9.4.1207.jar"/>
-        <pathelement location="lib/protobuf.jar"/>
-        <pathelement location="lib/slf4j-api.jar"/>
-        <pathelement location="lib/slf4j-simple.jar"/>
-        <pathelement location="lib/stanford-chinese-corenlp-2015-12-08-models.jar"/>
-        <pathelement location="lib/stanford-corenlp-3.6.0-models.jar"/>
-        <pathelement location="lib/stanford-corenlp-3.6.0.jar"/>
-        <pathelement location="lib/stanford-ner-3.6.0.jar"/>
-        <pathelement location="lib/stanford-ner.jar"/>
-        <pathelement location="lib/stanford-segmenter-3.6.0.jar"/>
-        <pathelement location="lib/xom-1.2.10-src.jar"/>
-        <pathelement location="lib/xom.jar"/>
-    	<pathelement location="lib/cpdetector_1.0.6.jar"/>
-    </path>
-    <target name="init">
-        <mkdir dir="bin"/>
-        <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="clean">
-        <delete dir="bin"/>
-    </target>
-    <target depends="clean" name="cleanall"/>
-    <target depends="build-project" name="build"/>
-              	      	
-    <target depends="init" name="build-project">
-        <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false">
-            <src path="src"/>
-            <classpath refid="finbase1.classpath"/> 
-        </javac>
-    </target>
+<!-- WARNING: Eclipse auto-generated file. Any modifications will be overwritten. 
+	To include a user specific buildfile here, simply create one in the same 
+	directory with the processing instruction <?eclipse.ant.import?> as the first 
+	entry and export the buildfile again. -->
+<project basedir="." default="build" name="finbase1">
+	<property environment="env" />
+	<property name="debuglevel" value="source,lines,vars" />
+	<property name="target" value="1.8" />
+	<property name="source" value="1.8" />
+	<target name="FinbaseNLPPipeline">
+		<java classname="cn.edu.zju.finbase.FinbaseNLPPipeline"
+			failonerror="true" fork="yes">
+			<jvmarg value="-mx4G" />
+			<!-- 设置数据库连接 -->
+			<arg value="postgresql://localhost/finbase" />
+			<!-- 设置起始文档ID, 缺省为1 -->
+			<arg value="199" />
+			<!-- 设置是否初始化sentencetable，缺省为不初始化，即：新的运行只加入到现有表中，不清除数据 -->
+			<arg value="false" />
+			<classpath refid="finbase1.classpath" />
+		</java>
+	</target>
 
-    <target name="FinbaseNLPPipeline">
-        <java classname="cn.edu.zju.finbase.FinbaseNLPPipeline" failonerror="true" fork="yes">
-        	<jvmarg value="-mx5G"/> 
-        	 <!-- 设置起始文档ID, 缺省为1 -->
-        	<arg value="postgresql://localhost/finbase" />
-        	<arg value="199" />
-        	 <!-- 设置是否初始化sentencetable，缺省为不初始化，即：新的运行只加入到现有表中，不清除数据 -->  
-        	<arg value="false" />
-            <classpath refid="finbase1.classpath"/>
-        </java>
-    </target>
-              	
-     <target name="SegmenterDIR">
-             <java classname="cn.edu.zju.finbase.SegmenterDIR" failonerror="true" fork="yes">
-             	<jvmarg value="-mx1g"/> 
-             	
-                <classpath refid="finbase1.classpath"/>
-                </java>
-     </target>
+	<target name="SegmenterDIR">
+		<java classname="cn.edu.zju.finbase.SegmenterDIR" failonerror="true"
+			fork="yes">
+			<jvmarg value="-mx1g" />
+			<!-- 设置数据库连接 -->
+            <arg value="postgresql://localhost/finbase" />
+			<!-- 设置文档类型 -->
+			<arg value="股权变动"/>
+			<!-- 设置输入文本的目录 -->
+			<arg value="./inputtxt"/>
+			<!-- 设置分词模型的目录 -->
+			<arg value="./nlp-tool/stanford-segmenter-2015-12-09/data"/>
+			<!-- 设置处理文件最大大小 -->
+			<arg value="300000"/>	
+			<!-- 设置是否初始化article table，缺省为不初始化，即：新的运行只加入到现有表中，不清除数据 -->
+			<arg value="false" />
+			<classpath refid="finbase1.classpath" />
+		</java>
+	</target>
+
+
+	<path id="finbase1.classpath">
+		<pathelement location="bin" />
+		<pathelement location="lib/ejml-0.23.jar" />
+		<pathelement location="lib/javax.json.jar" />
+		<pathelement location="lib/joda-time.jar" />
+		<pathelement location="lib/jollyday.jar" />
+		<pathelement location="lib/postgresql-9.4.1207.jar" />
+		<pathelement location="lib/protobuf.jar" />
+		<pathelement location="lib/slf4j-api.jar" />
+		<pathelement location="lib/slf4j-simple.jar" />
+		<pathelement location="lib/stanford-chinese-corenlp-2015-12-08-models.jar" />
+		<pathelement location="lib/stanford-corenlp-3.6.0-models.jar" />
+		<pathelement location="lib/stanford-corenlp-3.6.0.jar" />
+		<pathelement location="lib/stanford-ner-3.6.0.jar" />
+		<pathelement location="lib/stanford-ner.jar" />
+		<pathelement location="lib/stanford-segmenter-3.6.0.jar" />
+		<pathelement location="lib/xom-1.2.10-src.jar" />
+		<pathelement location="lib/xom.jar" />
+		<pathelement location="lib/cpdetector_1.0.6.jar" />
+	</path>
+	<target name="init">
+		<mkdir dir="bin" />
+		<copy includeemptydirs="false" todir="bin">
+			<fileset dir="src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+	<target name="clean">
+		<delete dir="bin" />
+	</target>
+	<target depends="clean" name="cleanall" />
+	<target depends="build-project" name="build" />
+
+	<target depends="init" name="build-project">
+		<echo message="${ant.project.name}: ${ant.file}" />
+		<javac debug="true" debuglevel="${debuglevel}" destdir="bin"
+			includeantruntime="false">
+			<src path="src" />
+			<classpath refid="finbase1.classpath" />
+		</javac>
+	</target>
+
+
 </project>
