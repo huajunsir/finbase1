@@ -27,13 +27,55 @@ import edu.stanford.nlp.util.*;
 
 public class FinbaseNLPPipeline {
 
-	int start_id=1883;  // 用于设置起始文档id。
+	int start_id=1;  // 用于设置起始文档id。
 	
-	String parse_maxlen="150";
-	int max_text_length = 200000;
-	int min_sentence_length =50;
+	public int getStart_id() {
+		return start_id;
+	}
+
+	public void setStart_id(int start_id) {
+		this.start_id = start_id;
+	}
+
+	public String getParse_maxlen() {
+		return parse_maxlen;
+	}
+
+	public void setParse_maxlen(String parse_maxlen) {
+		this.parse_maxlen = parse_maxlen;
+	}
+
+	public int getMax_text_length() {
+		return max_text_length;
+	}
+
+	public void setMax_text_length(int max_text_length) {
+		this.max_text_length = max_text_length;
+	}
+
+	public int getMin_sentence_length() {
+		return min_sentence_length;
+	}
+
+	public void setMin_sentence_length(int min_sentence_length) {
+		this.min_sentence_length = min_sentence_length;
+	}
+
+	public boolean isInit_sentence_table() {
+		return init_sentence_table;
+	}
+
+	public void setInit_sentence_table(boolean init_sentence_table) {
+		this.init_sentence_table = init_sentence_table;
+	}
+
+	String parse_maxlen="150"; //default
+	int max_text_length = 200000; //default
+	int min_sentence_length =50; //default
 	
 	boolean init_sentence_table=false; // 如要重建Sentence table，设置为true，如果继续添加，设置为false
+	
+	
 	StanfordCoreNLP pipeline;
 	Connection con=null;
 	
@@ -329,6 +371,8 @@ public class FinbaseNLPPipeline {
 
 	public static void main(String[] args) {
 		FinbaseNLPPipeline fp=new FinbaseNLPPipeline();
+		fp.setStart_id(Integer.valueOf(args[0]));
+		fp.setInit_sentence_table(Boolean.valueOf(args[1]));
 		fp.annotateAllArticles();
 	}
 

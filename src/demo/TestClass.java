@@ -1,6 +1,13 @@
 package demo;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Properties;
+
 import info.monitorenter.cpdetector.io.*;
 
 public class TestClass {
@@ -86,9 +93,40 @@ public class TestClass {
 
 	public static void main(String[] args) {
 		
-		TestClass tc=new TestClass();
-		tc.testLength();
-        //System.out.println("\\\"");
+		File file=new File("./db.url");
+        //读取每个文件内容
+        InputStreamReader read;
+		try {
+			read = new InputStreamReader(
+			         new FileInputStream(file));
+		
+        BufferedReader bufferedReader = new BufferedReader(read);
+        String url = "jdbc:"+ bufferedReader.readLine();
+        System.out.println("连接到数据库。。。。" + url);
+        read.close();
+    
+        Properties dbprops = new Properties();
+        dbprops.setProperty("user","root");
+        dbprops.setProperty("password","Murren@2013");
+        Connection con = DriverManager.getConnection(url, dbprops);
+        
+        //先删除已有sentence表格，
+    	Statement st = con.createStatement();
+    	String sql = "select count(*) from articles";
+    	ResultSet rs = st.executeQuery(sql);
+		
+		
+		while (rs.next())
+		{
+			System.out.println(rs.getInt(1));
+			
+		} 
+		rs.close();	
+		st.close();
+		} catch (IOException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}//考虑到编码格式
 
 	}
 

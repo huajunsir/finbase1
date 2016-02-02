@@ -46,13 +46,19 @@
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false">
             <src path="src"/>
-            <classpath refid="finbase1.classpath"/>
+            <classpath refid="finbase1.classpath"/> 
         </javac>
     </target>
 
     <target name="FinbaseNLPPipeline">
         <java classname="cn.edu.zju.finbase.FinbaseNLPPipeline" failonerror="true" fork="yes">
         	<jvmarg value="-mx5G"/> 
+        	 <!-- 设置起始文档ID, 缺省为1 -->
+        	 <arg value="1883" />
+        	 <!-- 设置是否初始化sentencetable，缺省为不初始化，即：新的运行只加入到现有表中，不清除数据 -->  
+        	<arg value="false" />
+        		
+        	
             <classpath refid="finbase1.classpath"/>
         </java>
     </target>
@@ -60,6 +66,7 @@
      <target name="SegmenterDIR">
              <java classname="cn.edu.zju.finbase.SegmenterDIR" failonerror="true" fork="yes">
              	<jvmarg value="-mx1g"/> 
+             	
                 <classpath refid="finbase1.classpath"/>
                 </java>
      </target>

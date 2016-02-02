@@ -1,5 +1,6 @@
 package cn.edu.zju.finbase;
 import info.monitorenter.cpdetector.io.*;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.nio.charset.Charset;
@@ -7,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.sql.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import edu.stanford.nlp.ie.crf.CRFClassifier;
 import edu.stanford.nlp.io.IOUtils;
@@ -41,7 +44,7 @@ public class SegmenterDIR {
 	    //初始化数据库连接
 		try {
 			
-			File file=new File("./db_finbase.url");
+			File file=new File("./db.url");
             //读取每个文件内容
             InputStreamReader read = new InputStreamReader(
                      new FileInputStream(file));//考虑到编码格式
@@ -82,8 +85,7 @@ public class SegmenterDIR {
 	public String readFiles(File filename){
 		String sample="";
 		try {
-	        	
-	        	
+	        		
 	        	java.nio.charset.Charset charset = detector.detectCodepage(filename.toURL());		
 	        	String encoding=charset.toString();
 	        	if(encoding=="windows-1252") encoding="utf-16le";
@@ -116,6 +118,36 @@ public class SegmenterDIR {
 	}
 	
 	
+	public String getPublishDate(String article_content) throws IOException{
+
+		  String publish_date="";
+		  File dir = new File(this.inputDir);
+		  File[] files = dir.listFiles();
+		  for(int i=1;i<files.length;i++){
+			  System.out.println("-对文件" + files[i].toString() + "-进行分词-文件大小:"+files[i].length()+"已处理"+i+"个文件--");       
+				
+			  if(files[i].length() > max_text_length) continue; //不处理过大的文本文件。
+			  java.nio.charset.Charset charset = detector.detectCodepage(files[i].toURL());// 检测文本的编码格式，可能是gb2312, window-1252等。	
+			  
+			  String encoding=charset.toString();
+			  if(encoding=="windows-1252") encoding="utf-16le"; //检测到的windows-1252编码实际上是utf-16le编码
+    	    
+			  article_content = IOUtils.slurpFile(files[i].toString(),encoding); //基于给定的编码读取文本内容。
+	
+			  Pattern pattern = Pattern.compile("\\d{4}\\s{1,3}年\\s{1,3}\\d{1,2}\\s{1,3}月\\s{1,3}\\d{1,2}\\s{1,3}日");
+			  Matcher matcher = pattern.matcher(article_content);
+			  if(matcher.find())
+				  System.out.println(matcher.group());
+		 
+		  		}
+		//  Pattern pattern = Pattern.compile("href=\"(.+?)\"");
+		 // Matcher matcher = pattern.matcher("<a href=\"index.html\">主页</a>");
+		 // if(matcher.find())
+		 //   System.out.println(matcher.group(0));
+
+		  return publish_date;
+		
+	}
 	
 	public void segmentDir() {
 		
@@ -232,8 +264,13 @@ public class SegmenterDIR {
 		*/
 		
 	    SegmenterDIR sg=new SegmenterDIR();
-	    //sg.testEncoding();
-	    sg.segmentDir();
+	    try {
+			sg.getPublishDate("");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    //sg.segmentDir();
 
 	}
 
