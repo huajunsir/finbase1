@@ -27,10 +27,10 @@ import edu.stanford.nlp.util.*;
 
 public class FinbaseNLPPipeline {
 
-	int start_id=335;  // 用于设置起始文档id。
+	int start_id=789;  // 用于设置起始文档id。
 	
 	String parse_maxlen="150";
-	int max_text_length = 100000;
+	int max_text_length = 200000;
 	int min_sentence_length =50;
 	
 	boolean init_sentence_table=false; // 如要重建Sentence table，设置为true，如果继续添加，设置为false
@@ -72,7 +72,7 @@ public class FinbaseNLPPipeline {
 			//for debug only
 			out=new PrintWriter("./debug_output");
 			
-        	File file=new File("./db.url");
+        	File file=new File("./db_nlp.url");
 	            //读取每个文件内容
 	        InputStreamReader read = new InputStreamReader(
 	                     new FileInputStream(file));//考虑到编码格式
