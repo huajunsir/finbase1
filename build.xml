@@ -37,12 +37,18 @@
 			<!-- 设置处理文件最大大小 -->
 			<arg value="300000"/>	
 			<!-- 设置是否初始化article table，缺省为不初始化，即：新的运行只加入到现有表中，不清除数据 -->
-			<arg value="false" />
+			<arg value="true" />
 			<classpath refid="finbase1.classpath" />
 		</java>
 	</target>
 
-
+	<target name="TestClass">
+			<java classname="demo.TestClass" failonerror="true"
+				fork="yes">
+				<classpath refid="finbase1.classpath" />
+			</java>
+		</target>
+	
 	<path id="finbase1.classpath">
 		<pathelement location="bin" />
 		<pathelement location="lib/ejml-0.23.jar" />
