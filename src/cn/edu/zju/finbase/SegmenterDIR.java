@@ -24,6 +24,7 @@ public class SegmenterDIR {
 	//private String publish_date="2015-01-01";
 	private boolean init_table=false;
 	
+	
 	int max_text_length=300000; //控制文件大小
 	
 	Connection con=null;
