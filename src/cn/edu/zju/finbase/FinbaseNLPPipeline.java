@@ -91,6 +91,7 @@ public class FinbaseNLPPipeline {
 	public void setDb_url(String db_url) {
 		this.db_url = db_url;
 	}
+
 	
 	/**
 	 * 读db.url文件，连接到PostgreSQL数据库
@@ -196,6 +197,18 @@ public class FinbaseNLPPipeline {
 		
 			
 	    try {
+	    	
+	    	if(con.isClosed()){
+	    		String url = "jdbc:"+ db_url;
+			    
+		        //read.close();
+		      
+		        Properties dbprops = new Properties();
+		        dbprops.setProperty("user","root");
+		        dbprops.setProperty("password","");
+		        con = DriverManager.getConnection(url, dbprops);
+		        System.out.println("重新连接到数据库--------" + url);			   
+	    	}
 	    	
 	    	Statement st = con.createStatement();
 	    

@@ -24,6 +24,7 @@ public class SegmenterDIR {
 	//private String publish_date="2015-01-01";
 	private boolean init_table=false;
 	private String user_name="root";
+	private int start_doc_number=1;
 	
 	
 	int max_text_length=300000; //控制文件大小
@@ -220,8 +221,9 @@ public class SegmenterDIR {
 		    File[] files = dir.listFiles();
 
 		     //逐一处理待分词文件，并写入postgresql数据库
-		  
+		    
 		    for(int i=0;i<files.length;i++){
+		    	if(i<start_doc_number)continue;
 		        System.out.println("-对文件" + files[i].toString() + "-进行分词-文件大小:"+files[i].length()+"已处理"+i+"个文件--");       
 	
 		        if(files[i].length() > max_text_length) continue; //不处理过大的文本文件。
@@ -247,6 +249,18 @@ public class SegmenterDIR {
 					        
 					        while(it.hasNext()) temp += (String) it.next() +" "; 
 					        //分词结果写入数据库 
+					        if(con.isClosed()){
+					        	String url = "jdbc:"+ db_url;
+							    
+						        //read.close();
+						      
+						        Properties dbprops = new Properties();
+						        dbprops.setProperty("user",user_name);
+						        dbprops.setProperty("password","");
+						        con = DriverManager.getConnection(url, dbprops);
+						        System.out.println("重新连接到数据库--------" + url);
+								
+					        }
 					        
 					        Statement st = con.createStatement();
 						    
@@ -257,6 +271,7 @@ public class SegmenterDIR {
 							//System.out.println(sql);
 							st.executeUpdate(sql);
 							st.close();
+							st=null;
 		        		}
 				        
 			    } catch (Exception e) {
@@ -308,6 +323,7 @@ public class SegmenterDIR {
 			sg.setMax_text_length(Integer.valueOf(args[4]));
 			sg.setInit_table(Boolean.valueOf(args[5]));
 			sg.setUser_name(args[6]);
+			sg.setStart_doc_number(Integer.valueOf(args[6]));
 			sg.init();
 			sg.segmentDir();
 		}
@@ -368,5 +384,13 @@ public class SegmenterDIR {
 
 	public void setUser_name(String user_name) {
 		this.user_name = user_name;
+	}
+
+	public int getStart_doc_number() {
+		return start_doc_number;
+	}
+
+	public void setStart_doc_number(int start_doc_number) {
+		this.start_doc_number = start_doc_number;
 	}
 }

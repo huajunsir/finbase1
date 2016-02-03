@@ -37,9 +37,11 @@
 			<!-- 设置处理文件最大大小 -->
 			<arg value="300000"/>	
 			<!-- 设置是否初始化article table，缺省为不初始化，即：新的运行只加入到现有表中，不清除数据 -->
-			<arg value="true" />
+			<arg value="false" />
 			<!-- 设置数据库登录用户名 -->
 		    <arg value="root" />
+			<!-- 设置starte_doc_number -->
+		    <arg value="1" />
 			<classpath refid="finbase1.classpath" />
 		</java>
 	</target>
