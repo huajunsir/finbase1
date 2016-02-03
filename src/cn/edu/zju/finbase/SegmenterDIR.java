@@ -23,6 +23,7 @@ public class SegmenterDIR {
 	private String article_type="";
 	//private String publish_date="2015-01-01";
 	private boolean init_table=false;
+	private String user_name="root";
 	
 	
 	int max_text_length=300000; //控制文件大小
@@ -51,8 +52,8 @@ public class SegmenterDIR {
 	        //read.close();
 	      
 	        Properties dbprops = new Properties();
-	        //dbprops.setProperty("user","root");
-	        //dbprops.setProperty("password","");
+	        dbprops.setProperty("user",user_name);
+	        dbprops.setProperty("password","");
 	        con = DriverManager.getConnection(url, dbprops);
 	        System.out.println("成功连接到数据库--------" + url);
 			 
@@ -306,6 +307,7 @@ public class SegmenterDIR {
 			sg.setBasedir(args[3]);
 			sg.setMax_text_length(Integer.valueOf(args[4]));
 			sg.setInit_table(Boolean.valueOf(args[5]));
+			sg.setUser_name(args[6]);
 			sg.init();
 			sg.segmentDir();
 		}
@@ -358,5 +360,13 @@ public class SegmenterDIR {
 
 	public void setMax_text_length(int max_text_length) {
 		this.max_text_length = max_text_length;
+	}
+
+	public String getUser_name() {
+		return user_name;
+	}
+
+	public void setUser_name(String user_name) {
+		this.user_name = user_name;
 	}
 }
