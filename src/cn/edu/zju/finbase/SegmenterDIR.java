@@ -323,7 +323,7 @@ public class SegmenterDIR {
 			sg.setMax_text_length(Integer.valueOf(args[4]));
 			sg.setInit_table(Boolean.valueOf(args[5]));
 			sg.setUser_name(args[6]);
-			sg.setStart_doc_number(Integer.valueOf(args[6]));
+			sg.setStart_doc_number(Integer.valueOf(args[7]));
 			sg.init();
 			sg.segmentDir();
 		}
