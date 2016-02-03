@@ -22,6 +22,7 @@
 		</java>
 	</target>
 
+	
 	<target name="SegmenterDIR">
 		<java classname="cn.edu.zju.finbase.SegmenterDIR" failonerror="true"
 			fork="yes">
