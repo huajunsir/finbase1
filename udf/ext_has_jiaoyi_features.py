@@ -33,10 +33,10 @@ for row in sys.stdin:
   features.add("num_words_between=%s" % len(words_between.elements))
 
   # Feature 3: Does the last word (last name) match?
-  last_word_left = ddlib.materialize_span(words, span1)[-1]
-  last_word_right = ddlib.materialize_span(words, span2)[-1]
-  if (last_word_left == last_word_right):
-    features.add("potential_last_name_match")
+  #last_word_left = ddlib.materialize_span(words, span1)[-1]
+  #last_word_right = ddlib.materialize_span(words, span2)[-1]
+  #if (last_word_left == last_word_right):
+  #  features.add("potential_last_name_match")
 
   for feature in features:
     print str(relation_id) + '\t' + feature
