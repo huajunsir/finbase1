@@ -10,18 +10,22 @@ has_jiaoyi = set()
 related_companies = set()
 lines = open(APP_HOME + '/data/labeled/guquan_jiaoyi.csv').readlines()
 for line in lines: 
-  name1, name2, relation = line.strip().split(',')[0:3]
+  name1, name2 = line.strip().split(',')[0:2]
+  name1=name1.replace('"','').replace('(','').replace(')','')
+  name2=name2.replace('"','').replace('(','').replace(')','') 
+  if(i<500):print(name1 + ':' + name2)
   has_jiaoyi.add((name1, name2))  # Add a spouse relation pair
   related_companies.add(name1)    # Record the person as married
   related_companies.add(name2)
+
   
   # Load relations of people that are not spouse
   # The non-spouse KB lists incompatible relations, e.g. childrens, siblings, parents.
 non_jiaoyi = set()
-lines = open(APP_HOME + '/data/labeled/mu_gongsi.csv').readlines()
-for line in lines:
-    name1, name2, relation = line.strip().split(',')[0:3]
-    non_jiaoyi.add((name1, name2))  # Add a non-spouse relation pair
+#lines = open(APP_HOME + '/data/labeled/mu_gongsi.csv').readlines()
+#for line in lines:
+ #   name1, name2, relation = line.strip().split(',')[0:3]
+  #  non_jiaoyi.add((name1, name2))  # Add a non-spouse relation pair
 
 # For each input tuple
 for row in sys.stdin:
@@ -46,7 +50,7 @@ for row in sys.stdin:
     is_true = '0'
   # DS rule 4 false if they are both married, but not married to each other:
   # elif p1_text_lower in related_companies and p2_text_lower in related_companies:
-    is_true = '0'
+   # is_true = '0'
 
   # Output relation candidates into output table
   print '\t'.join([
