@@ -29,7 +29,7 @@ non_jiaoyi = set()
 # For each input tuple
 for row in sys.stdin:
   parts = row.strip().split('\t')
-  sentence_id, p1_id, p1_text, p2_id, p2_text = parts
+  if(leng(parts)==5):sentence_id, p1_id, p1_text, p2_id, p2_text = parts
 
   p1_text = p1_text.strip()
   p2_text = p2_text.strip()
