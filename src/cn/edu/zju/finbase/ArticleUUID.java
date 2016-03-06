@@ -8,6 +8,9 @@ import java.sql.Statement;
 import java.util.Properties;
 import java.util.UUID;
 
+
+
+
 public class ArticleUUID {
 	private String db_url="";
 	private String user_name="root";
