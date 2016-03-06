@@ -28,7 +28,7 @@
 			fork="yes">
 			<jvmarg value="-mx1g" />
 			<!-- 设置数据库连接 -->
-            <arg value="postgresql://localhost/finbase_nlp_hushi_guquan_2013_2015" />
+            <arg value="postgresql://localhost/finbase_nlp_hushi_jiaoyi_2010_2014" />
 			<!-- 设置文档类型 -->
 			<arg value="股权变动"/>
 			<!-- 设置输入文本的目录 -->
@@ -40,9 +40,22 @@
 			<!-- 设置是否初始化article table，缺省为不初始化，即：新的运行只加入到现有表中，不清除数据 -->
 			<arg value="true" />
 			<!-- 设置数据库登录用户名 -->
-		    <arg value="chenhuajun" />
+		    <arg value="boboss" />
 			<!-- 设置starte_doc_number -->
 		    <arg value="1" />
+			<classpath refid="finbase1.classpath" />
+		</java>
+	</target>
+
+    	
+	<target name="ArticleUUID">
+		<java classname="cn.edu.zju.finbase.ArticleUUID" failonerror="true"
+			fork="yes">
+			<jvmarg value="-mx1g" />
+			<!-- 设置数据库连接 -->
+            <arg value="postgresql://localhost/finbase" />
+			<!-- 设置数据库登录用户名 -->
+		    <arg value="boboss" />
 			<classpath refid="finbase1.classpath" />
 		</java>
 	</target>
