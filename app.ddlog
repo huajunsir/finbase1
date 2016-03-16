@@ -5,10 +5,10 @@
 @extraction
 has_spouse?(
     @key
-    @references(relation="person_mention", column="mention_id", alias="p1")
+    @references(relation="org_mention", column="mention_id", alias="p1")
     p1_id text,
     @key
-    @references(relation="person_mention", column="mention_id", alias="p2")
+    @references(relation="org_mention", column="mention_id", alias="p2")
     p2_id text
 ).
 
@@ -64,7 +64,7 @@ sentences += nlp_markup(doc_id, content) :-
 
 ## Candidate mapping ##########################################################
 @extraction
-person_mention(
+org_mention(
     @key
     mention_id text,
     @searchable
@@ -78,33 +78,33 @@ person_mention(
     end_index int
 ).
 
-function map_person_mention over (
+function map_org_mention over (
         doc_id text,
         sentence_index int,
         tokens text[],
         ner_tags text[]
-    ) returns rows like person_mention
-    implementation "udf/map_person_mention.py" handles tsv lines.
+    ) returns rows like org_mention
+    implementation "udf/map_org_mention.py" handles tsv lines.
 
-person_mention += map_person_mention(
+org_mention += map_org_mention(
     doc_id, sentence_index, tokens, ner_tags
 ) :- sentences(doc_id, sentence_index, _, tokens, _, _, ner_tags, _, _, _).
 
-spouse_candidate(
+jiaoyi_candidate(
     p1_id text,
     p1_name text,
     p2_id text,
     p2_name text
 ).
 
-num_people(doc_id, sentence_index, COUNT(p)) :-
-    person_mention(p, _, doc_id, sentence_index, _, _).
+num_org(doc_id, sentence_index, COUNT(p)) :-
+   org_mention(p, _, doc_id, sentence_index, _, _).
 
-spouse_candidate(p1, p1_name, p2, p2_name) :-
-    num_people(same_doc, same_sentence, num_p),
-    person_mention(p1, p1_name, same_doc, same_sentence, p1_begin, _),
-    person_mention(p2, p2_name, same_doc, same_sentence, p2_begin, _),
-   ## num_p < 5,
+jiaoyi_candidate(p1, p1_name, p2, p2_name) :-
+    num_org(same_doc, same_sentence, num_p),
+    org_mention(p1, p1_name, same_doc, same_sentence, p1_begin, _),
+    org_mention(p2, p2_name, same_doc, same_sentence, p2_begin, _),
+    num_p < 5,
     p1 < p2,
     p1_name != p2_name,
     p1_begin != p2_begin.
@@ -114,7 +114,7 @@ spouse_candidate(p1, p1_name, p2, p2_name) :-
 
 # Feature extraction (using DDLIB via a UDF) at the relation level
 @extraction
-spouse_feature(
+jiaoyi_feature(
     @key
     @references(relation="has_spouse", column="p1_id", alias="has_spouse")
     p1_id text,
@@ -125,7 +125,7 @@ spouse_feature(
     feature text
 ).
 
-function extract_spouse_features over (
+function extract_jiaoyi_features over (
         p1_id text,
         p2_id text,
         p1_begin_index int,
@@ -140,15 +140,15 @@ function extract_spouse_features over (
         ner_tags text[],
         dep_types text[],
         dep_tokens int[]
-    ) returns rows like spouse_feature
-    implementation "udf/extract_spouse_features.py" handles tsv lines.
+    ) returns rows like jiaoyi_feature
+    implementation "udf/extract_jiaoyi_features.py" handles tsv lines.
 
-spouse_feature += extract_spouse_features(
+jiaoyi_feature += extract_jiaoyi_features(
     p1_id, p2_id, p1_begin_index, p1_end_index, p2_begin_index, p2_end_index,
     doc_id, sent_index, tokens, lemmas, pos_tags, ner_tags, dep_types, dep_tokens
 ) :-
-    person_mention(p1_id, _, doc_id, sent_index, p1_begin_index, p1_end_index),
-    person_mention(p2_id, _, doc_id, sent_index, p2_begin_index, p2_end_index),
+    org_mention(p1_id, _, doc_id, sent_index, p1_begin_index, p1_end_index),
+    org_mention(p2_id, _, doc_id, sent_index, p2_begin_index, p2_end_index),
     sentences(doc_id, sent_index, _, tokens, lemmas, pos_tags, ner_tags, _, dep_types, dep_tokens).
 
 
@@ -169,7 +169,7 @@ spouse_label(
 
 # distant supervision using data from DBpedia
 spouse_label(p1,p2, 1, "from_dbpedia") :-
-    spouse_candidate(p1, p1_name, p2, p2_name),
+    jiaoyi_candidate(p1, p1_name, p2, p2_name),
     spouses_dbpedia(n1, n2),
     [ lower(n1) = lower(p1_name), lower(n2) = lower(p2_name) ;
       lower(n2) = lower(p1_name), lower(n1) = lower(p2_name) ].
@@ -197,9 +197,9 @@ spouse_label += supervise(
     p2_id, p2_begin, p2_end,
     doc_id, sentence_index, sentence_text,
     tokens, lemmas, pos_tags, ner_tags, dep_types, dep_token_indexes
-) :- spouse_candidate(p1_id, _, p2_id, _),
-    person_mention(p1_id, p1_text, doc_id, sentence_index, p1_begin, p1_end),
-    person_mention(p2_id, p2_text,      _,              _, p2_begin, p2_end),
+) :- jiaoyi_candidate(p1_id, _, p2_id, _),
+    org_mention(p1_id, p1_text, doc_id, sentence_index, p1_begin, p1_end),
+    org_mention(p2_id, p2_text,      _,              _, p2_begin, p2_end),
     sentences(
         doc_id, sentence_index, sentence_text,
         tokens, lemmas, pos_tags, ner_tags, _, dep_types, dep_token_indexes
@@ -214,8 +214,8 @@ has_spouse(p1_id, p2_id) = if l > 0 then TRUE
                       else if l < 0 then FALSE
                       else NULL end :- spouse_label_resolved(p1_id, p2_id, l).
 
-# make sure all pairs in spouse_candidate are considered as unsupervised examples
-has_spouse(p1, p2) = NULL::BOOLEAN :- spouse_candidate(p1, _, p2, _).
+# make sure all pairs in jiaoyi_candidate are considered as unsupervised examples
+has_spouse(p1, p2) = NULL::BOOLEAN :- jiaoyi_candidate(p1, _, p2, _).
 
 ###############################################################################
 
@@ -224,16 +224,16 @@ has_spouse(p1, p2) = NULL::BOOLEAN :- spouse_candidate(p1, _, p2, _).
 # Features
 @weight(f)
 has_spouse(p1_id, p2_id) :-
-    spouse_candidate(p1_id, _, p2_id, _),
-    spouse_feature(p1_id, p2_id, f).
+    jiaoyi_candidate(p1_id, _, p2_id, _),
+    jiaoyi_feature(p1_id, p2_id, f).
 
 # Inference rule: Symmetry
 @weight(3.0)
 has_spouse(p1_id, p2_id) => has_spouse(p2_id, p1_id) :-
-    spouse_candidate(p1_id, _, p2_id, _).
+    jiaoyi_candidate(p1_id, _, p2_id, _).
 
 # Inference rule: Only one marriage
 @weight(-1.0)
 has_spouse(p1_id, p2_id) => has_spouse(p1_id, p3_id) :-
-    spouse_candidate(p1_id, _, p2_id, _),
-    spouse_candidate(p1_id, _, p3_id, _).
+    jiaoyi_candidate(p1_id, _, p2_id, _),
+    jiaoyi_candidate(p1_id, _, p3_id, _).

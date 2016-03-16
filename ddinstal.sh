@@ -1,1 +1,1 @@
-bash <(curl -fsSL deepdive.stanford.edu/install)
+pg_ctl -D /usr/local/var/postgres -l /usr/local/var/postgres/server.log start

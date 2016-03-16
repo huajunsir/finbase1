@@ -22,7 +22,7 @@ def supervise(
     ):
 
     # Constants
-    MARRIED = frozenset(["wife", "husband"])
+    MARRIED = frozenset(["概述", "股权"])
     FAMILY = frozenset(["mother", "father", "sister", "brother", "brother-in-law"])
     MAX_DIST = 10
 
@@ -40,7 +40,7 @@ def supervise(
         yield spouse._replace(label=-1, type='neg:far_apart')
 
     # Rule: Candidates that have a third person in between
-    if 'PERSON' in intermediate_ner_tags:
+    if 'ORG' in intermediate_ner_tags:
         yield spouse._replace(label=-1, type='neg:third_person_between')
 
     # Rule: Sentences that contain wife/husband in between
